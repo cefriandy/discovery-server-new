@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: discovery-server-new
+  name: discovery-server-new
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discovery-server-new
+  strategy: {}
+  template:
+    metadata:
+
+      labels:
+        app: discovery-server-new
+    spec:
+      containers:
+        - env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+          image: cefriandy/discovery-server-new:latest
+          name: discovery-server-new
+          ports:
+            - containerPort: 8761
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: discovery-server-new
+  name: discovery-server-new
+spec:
+  ports:
+    - name: "8761"
+      port: 8761
+      targetPort: 8761
+  selector:
+    app: discovery-server-new
+status:
+  loadBalancer: {}
